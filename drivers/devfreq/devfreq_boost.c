@@ -10,13 +10,13 @@
 #include <linux/input.h>
 #include <linux/moduleparam.h>
 
-static unsigned int input_boost_duration = CONFIG_DEVFREQ_INPUT_BOOST_DURATION_MS;
-static unsigned int wake_boost_duration = CONFIG_DEVFREQ_WAKE_BOOST_DURATION_MS;
-static unsigned int boost_freq_for_cpubw = CONFIG_DEVFREQ_MSM_CPUBW_BOOST_FREQ;
+static unsigned short input_boost_duration = CONFIG_DEVFREQ_INPUT_BOOST_DURATION_MS;
+static unsigned short wake_boost_duration = CONFIG_DEVFREQ_WAKE_BOOST_DURATION_MS;
+static unsigned int msm_cpubw_boost_freq = CONFIG_DEVFREQ_MSM_CPUBW_BOOST_FREQ;
 
 module_param(input_boost_duration, short, 0644);
 module_param(wake_boost_duration, short, 0644);
-module_param(boost_freq_for_cpubw, short, 0644);
+module_param(msm_cpubw_boost_freq, uint, 0644);
 
 struct boost_dev {
 	struct workqueue_struct *wq;
@@ -388,7 +388,7 @@ static int __init devfreq_boost_init(void)
 	}
 
 	d->devices[DEVFREQ_MSM_CPUBW].boost_freq =
-		boost_freq_for_cpubw;
+		msm_cpubw_boost_freq;
 
 	devfreq_boost_input_handler.private = d;
 	ret = input_register_handler(&devfreq_boost_input_handler);
@@ -418,3 +418,4 @@ free_d:
 	return ret;
 }
 subsys_initcall(devfreq_boost_init);
+
